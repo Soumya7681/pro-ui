@@ -1,9 +1,9 @@
 {
-  "name": "uitech",
+  "name": "soureeui",
   "version": "1.0.0",
   "description": "Install the UI Architect design skill into Claude Code, Codex, Antigravity, Cursor, Windsurf, Gemini CLI, or Copilot, so the agent designs before it codes instead of producing generic AI-looking UI.",
   "bin": {
-    "uitech": "bin/uitech.js"
+    "soureeui": "bin/soureeui.js"
   },
   "files": [
     "bin",
@@ -42,6 +42,6 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "node bin/uitech.js --help > /dev/null && node bin/uitech.js list > /dev/null && echo ok"
+    "test": "node bin/soureeui.js --help > /dev/null && node bin/soureeui.js list > /dev/null && echo ok"
   }
 }

@@ -35,35 +35,35 @@ Framework-agnostic by design — it inspects the project before recommending any
 ## Install
 
 ```bash
-npx uitech init --ai cursor
+npx soureeui init --ai cursor
 ```
 
 That is the whole installation. No clone, no dependency, nothing to build.
 
 ```bash
-npx uitech init --ai claude,codex     # several at once
-npx uitech init --ai all              # every supported agent
-npx uitech init --ai claude --global  # every project on this machine
-npx uitech init                       # detects what the project uses, or asks
+npx soureeui init --ai claude,codex     # several at once
+npx soureeui init --ai all              # every supported agent
+npx soureeui init --ai claude --global  # every project on this machine
+npx soureeui init                       # detects what the project uses, or asks
 ```
 
 Install it permanently if you set up projects often:
 
 ```bash
-npm install -g uitech
-uitech init --ai antigravity
+npm install -g soureeui
+soureeui init --ai antigravity
 ```
 
 ### Commands
 
 | Command | Does |
 |---|---|
-| `uitech init --ai <agents>` | Install the skill for one or more agents |
-| `uitech init` | Detect the agents the project already uses, or ask |
-| `uitech update` | Refresh an existing install to the current version |
-| `uitech doctor` | Show what is installed and where |
-| `uitech remove [--ai <agents>]` | Uninstall, cleaning pointer blocks out of instruction files |
-| `uitech list` | List supported agents |
+| `soureeui init --ai <agents>` | Install the skill for one or more agents |
+| `soureeui init` | Detect the agents the project already uses, or ask |
+| `soureeui update` | Refresh an existing install to the current version |
+| `soureeui doctor` | Show what is installed and where |
+| `soureeui remove [--ai <agents>]` | Uninstall, cleaning pointer blocks out of instruction files |
+| `soureeui list` | List supported agents |
 
 ### Options
 
@@ -78,57 +78,57 @@ uitech init --ai antigravity
 
 ### Where it lands
 
-The skill body is copied once to `.ui-architect/`. Each agent gets a small pointer file
-telling it to read `.ui-architect/AGENTS.md` on UI work, so there is one copy of the content
+The skill body is copied once to `.soureeui/`. Each agent gets a small pointer file
+telling it to read `.soureeui/AGENTS.md` on UI work, so there is one copy of the content
 no matter how many agents you install. Claude Code is the exception: it uses its own skills
 directory, where `SKILL.md` loads natively.
 
 | `--ai` | Installs to | Activation |
 |---|---|---|
-| `claude` | `.claude/skills/ui-architect/` | Loads automatically on UI work; `/ui-architect` invokes it by name |
-| `codex` | `.ui-architect/` + pointer in `AGENTS.md` | Read at the start of UI tasks |
-| `antigravity` | `.ui-architect/` + pointer in `AGENTS.md` + `.agents/rules/ui-architect.md` | Workspace rule, applied on UI work |
-| `cursor` | `.ui-architect/` + `.cursor/rules/ui-architect.mdc` | Rule attaches on UI work |
-| `windsurf` | `.ui-architect/` + `.windsurf/rules/ui-architect.md` | Rule attaches on UI work |
-| `gemini` | `.ui-architect/` + pointer in `GEMINI.md` | Read at the start of UI tasks |
-| `copilot` | `.ui-architect/` + pointer in `.github/copilot-instructions.md` | Read at the start of UI tasks |
-| `generic` | `.ui-architect/` only | Point your own agent at `.ui-architect/AGENTS.md` |
+| `claude` | `.claude/skills/soureeui/` | Loads automatically on UI work; `/soureeui` invokes it by name |
+| `codex` | `.soureeui/` + pointer in `AGENTS.md` | Read at the start of UI tasks |
+| `antigravity` | `.soureeui/` + pointer in `AGENTS.md` + `.agents/rules/soureeui.md` | Workspace rule, applied on UI work |
+| `cursor` | `.soureeui/` + `.cursor/rules/soureeui.mdc` | Rule attaches on UI work |
+| `windsurf` | `.soureeui/` + `.windsurf/rules/soureeui.md` | Rule attaches on UI work |
+| `gemini` | `.soureeui/` + pointer in `GEMINI.md` | Read at the start of UI tasks |
+| `copilot` | `.soureeui/` + pointer in `.github/copilot-instructions.md` | Read at the start of UI tasks |
+| `generic` | `.soureeui/` only | Point your own agent at `.soureeui/AGENTS.md` |
 
-Pointer blocks are fenced with `<!-- ui-architect:begin -->` markers and written once.
-Re-running is safe: `uitech update` refreshes the body and the pointer in place, and
-`uitech remove` takes the block back out without touching the rest of your instruction file.
+Pointer blocks are fenced with `<!-- soureeui:begin -->` markers and written once.
+Re-running is safe: `soureeui update` refreshes the body and the pointer in place, and
+`soureeui remove` takes the block back out without touching the rest of your instruction file.
 
-With `--global`, Claude Code installs to `~/.claude/skills/ui-architect/`, and Antigravity
+With `--global`, Claude Code installs to `~/.claude/skills/soureeui/`, and Antigravity
 and Gemini CLI write their pointer to `~/.gemini/GEMINI.md`.
 
 ---
 
 ### Agent notes
 
-**Claude Code** — `uitech init --ai claude`. Reads the frontmatter description and loads the
-skill by itself when a task touches UI. `/ui-architect` invokes it by name.
+**Claude Code** — `soureeui init --ai claude`. Reads the frontmatter description and loads the
+skill by itself when a task touches UI. `/soureeui` invokes it by name.
 
-**Codex** — `uitech init --ai codex`. Appends the pointer to the project's root `AGENTS.md`,
+**Codex** — `soureeui init --ai codex`. Appends the pointer to the project's root `AGENTS.md`,
 creating it if absent.
 
-**Antigravity** — `uitech init --ai antigravity`. Writes both entry points Antigravity reads:
-the cross-tool `AGENTS.md` and a workspace rule at `.agents/rules/ui-architect.md`. Older
+**Antigravity** — `soureeui init --ai antigravity`. Writes both entry points Antigravity reads:
+the cross-tool `AGENTS.md` and a workspace rule at `.agents/rules/soureeui.md`. Older
 builds read `.agent/rules/` instead; copy the same file there if yours does. Precedence runs
 `GEMINI.md`, then `AGENTS.md`, then `.agents/rules/`, so a global install with `--global`
 lands in `~/.gemini/GEMINI.md` and wins over the project file.
 
-**Cursor** — `uitech init --ai cursor`. Writes `.cursor/rules/ui-architect.mdc` with
+**Cursor** — `soureeui init --ai cursor`. Writes `.cursor/rules/soureeui.mdc` with
 `alwaysApply: false` and a UI-scoped description, so the rule attaches when it is relevant
 instead of sitting in every context.
 
-**Windsurf** — `uitech init --ai windsurf`. Writes `.windsurf/rules/ui-architect.md`.
+**Windsurf** — `soureeui init --ai windsurf`. Writes `.windsurf/rules/soureeui.md`.
 
-**Gemini CLI** — `uitech init --ai gemini`, or add `--global` for `~/.gemini/GEMINI.md`.
+**Gemini CLI** — `soureeui init --ai gemini`, or add `--global` for `~/.gemini/GEMINI.md`.
 
-**GitHub Copilot** — `uitech init --ai copilot`. Appends to `.github/copilot-instructions.md`.
+**GitHub Copilot** — `soureeui init --ai copilot`. Appends to `.github/copilot-instructions.md`.
 
-**Anything else** — `uitech init --ai generic` copies the body and stops. Point your agent at
-`.ui-architect/AGENTS.md` however it takes standing instructions: an instructions file, a
+**Anything else** — `soureeui init --ai generic` copies the body and stops. Point your agent at
+`.soureeui/AGENTS.md` however it takes standing instructions: an instructions file, a
 rules directory, a system prompt, or a memory entry. Any agent that reads a root `AGENTS.md`
 works with `--ai codex` as-is.
 
@@ -138,19 +138,19 @@ Clone the repository and copy the files by hand. For Claude Code:
 
 ```bash
 git clone https://github.com/shree2698/pro-ui.git
-mkdir -p .claude/skills/ui-architect
-cp pro-ui/SKILL.md .claude/skills/ui-architect/
-cp -r pro-ui/references pro-ui/templates .claude/skills/ui-architect/
+mkdir -p .claude/skills/soureeui
+cp pro-ui/SKILL.md .claude/skills/soureeui/
+cp -r pro-ui/references pro-ui/templates .claude/skills/soureeui/
 ```
 
-For any other agent, copy `AGENTS.md`, `references/`, and `templates/` into `.ui-architect/`
+For any other agent, copy `AGENTS.md`, `references/`, and `templates/` into `.soureeui/`
 and add this to whatever instruction file your agent reads:
 
 ```markdown
 ## UI / UX work
 
 Before any task that touches UI, UX, layout, visual design, styling, components,
-responsive behavior, or a redesign, read `.ui-architect/AGENTS.md` and follow it.
+responsive behavior, or a redesign, read `.soureeui/AGENTS.md` and follow it.
 ```
 
 ---
@@ -162,7 +162,7 @@ SKILL.md        entry point for Claude Code (frontmatter + core rules)
 AGENTS.md       entry point for every other agent (same core, no frontmatter)
 references/     loaded on demand, only when the task calls for it
 templates/      fill-in artifacts the agent produces
-bin/uitech.js    the CLI, zero dependencies, Node 18+
+bin/soureeui.js    the CLI, zero dependencies, Node 18+
 ```
 
 Both entry points are short on purpose. The depth sits in `references/`, read only when relevant, so a small styling fix does not drag a design-system essay into context.

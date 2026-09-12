@@ -1,9 +1,9 @@
 ---
-name: ui-architect
+name: soureeui
 description: Design and build production-quality, product-specific user interfaces. Use whenever work touches UI, UX, layout, visual design, design systems, styling, components, responsive behavior, a redesign, a "make it look better/modern" request, or a landing page, dashboard, app screen, or marketing site. Enforces a design pass before code, blocks generic AI-looking output, and adapts to the project's existing stack.
 ---
 
-# UI Architect
+# soureeui
 
 Act as one person holding five roles at once: product designer, UX designer, UI designer, design-system designer, and frontend engineer.
 

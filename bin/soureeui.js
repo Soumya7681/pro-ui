@@ -9,9 +9,9 @@ const readline = require('readline')
 const PKG = require('../package.json')
 const ROOT = path.resolve(__dirname, '..')
 const PAYLOAD = ['AGENTS.md', 'SKILL.md', 'references', 'templates']
-const BODY_DIR = '.ui-architect'
-const MARK_BEGIN = '<!-- ui-architect:begin -->'
-const MARK_END = '<!-- ui-architect:end -->'
+const BODY_DIR = '.soureeui'
+const MARK_BEGIN = '<!-- soureeui:begin -->'
+const MARK_END = '<!-- soureeui:end -->'
 
 const POINTER = (bodyPath) => `${MARK_BEGIN}
 ## UI / UX work
@@ -35,8 +35,8 @@ the design process, the anti-generic-UI rules, and reference files to load on de
 // agent registry -------------------------------------------------------------
 
 const claudeSkillDir = (ctx) => ctx.global
-  ? path.join(os.homedir(), '.claude', 'skills', 'ui-architect')
-  : path.join(ctx.dir, '.claude', 'skills', 'ui-architect')
+  ? path.join(os.homedir(), '.claude', 'skills', 'soureeui')
+  : path.join(ctx.dir, '.claude', 'skills', 'soureeui')
 
 const AGENTS = {
   claude: {
@@ -44,7 +44,7 @@ const AGENTS = {
     detect: ['.claude', 'CLAUDE.md'],
     install: (ctx) => {
       ctx.copyBody(claudeSkillDir(ctx), { skill: true })
-      ctx.note('loads automatically on UI work, or run /ui-architect')
+      ctx.note('loads automatically on UI work, or run /soureeui')
     },
     paths: (ctx) => [claudeSkillDir(ctx)],
   },
@@ -65,12 +65,12 @@ const AGENTS = {
       ctx.pointer(ctx.global
         ? path.join(os.homedir(), '.gemini', 'GEMINI.md')
         : path.join(ctx.dir, 'AGENTS.md'))
-      ctx.write(path.join(ctx.dir, '.agents', 'rules', 'ui-architect.md'),
+      ctx.write(path.join(ctx.dir, '.agents', 'rules', 'soureeui.md'),
         POINTER(`${BODY_DIR}/AGENTS.md`) + '\n')
     },
     paths: (ctx) => [
       path.join(ctx.dir, BODY_DIR),
-      path.join(ctx.dir, '.agents', 'rules', 'ui-architect.md'),
+      path.join(ctx.dir, '.agents', 'rules', 'soureeui.md'),
       path.join(ctx.dir, 'AGENTS.md'),
     ],
   },
@@ -79,19 +79,19 @@ const AGENTS = {
     detect: ['.cursor'],
     install: (ctx) => {
       ctx.body()
-      ctx.write(path.join(ctx.dir, '.cursor', 'rules', 'ui-architect.mdc'), CURSOR_RULE)
+      ctx.write(path.join(ctx.dir, '.cursor', 'rules', 'soureeui.mdc'), CURSOR_RULE)
     },
-    paths: (ctx) => [path.join(ctx.dir, BODY_DIR), path.join(ctx.dir, '.cursor', 'rules', 'ui-architect.mdc')],
+    paths: (ctx) => [path.join(ctx.dir, BODY_DIR), path.join(ctx.dir, '.cursor', 'rules', 'soureeui.mdc')],
   },
   windsurf: {
     label: 'Windsurf',
     detect: ['.windsurf'],
     install: (ctx) => {
       ctx.body()
-      ctx.write(path.join(ctx.dir, '.windsurf', 'rules', 'ui-architect.md'),
+      ctx.write(path.join(ctx.dir, '.windsurf', 'rules', 'soureeui.md'),
         POINTER(`${BODY_DIR}/AGENTS.md`) + '\n')
     },
-    paths: (ctx) => [path.join(ctx.dir, BODY_DIR), path.join(ctx.dir, '.windsurf', 'rules', 'ui-architect.md')],
+    paths: (ctx) => [path.join(ctx.dir, BODY_DIR), path.join(ctx.dir, '.windsurf', 'rules', 'soureeui.md')],
   },
   gemini: {
     label: 'Gemini CLI',
@@ -336,7 +336,7 @@ async function cmdInit (opts) {
   const agents = await pickAgents(opts)
 
   log('')
-  log(`${bold('uitech')} ${dim('v' + PKG.version)}  ${opts.dir}${opts.dryRun ? yellow('  dry run') : ''}`)
+  log(`${bold('soureeui')} ${dim('v' + PKG.version)}  ${opts.dir}${opts.dryRun ? yellow('  dry run') : ''}`)
   log('')
 
   for (const name of agents) {
@@ -357,16 +357,16 @@ function cmdList () {
   log(bold('Supported agents'))
   NAMES.forEach((n) => log(`  ${n.padEnd(12)} ${dim(AGENTS[n].label)}`))
   log('')
-  log(dim('  uitech init --ai cursor'))
-  log(dim('  uitech init --ai claude,codex'))
-  log(dim('  uitech init --ai all'))
+  log(dim('  soureeui init --ai cursor'))
+  log(dim('  soureeui init --ai claude,codex'))
+  log(dim('  soureeui init --ai all'))
   log('')
 }
 
 function installedPaths (name, ctx) {
   return AGENTS[name].paths(ctx).filter((p) => {
     if (!fs.existsSync(p)) return false
-    if (/\.(md|mdc)$/.test(p) && !p.includes('ui-architect')) {
+    if (/\.(md|mdc)$/.test(p) && !p.includes('soureeui')) {
       return fs.readFileSync(p, 'utf8').includes(MARK_BEGIN)
     }
     return true
@@ -375,7 +375,7 @@ function installedPaths (name, ctx) {
 
 function cmdDoctor (opts) {
   log('')
-  log(`${bold('uitech doctor')}  ${dim(opts.dir)}`)
+  log(`${bold('soureeui doctor')}  ${dim(opts.dir)}`)
   log('')
   const ctx = makeCtx(opts, [])
   let any = false
@@ -386,7 +386,7 @@ function cmdDoctor (opts) {
     log(`${green('installed')}  ${bold(AGENTS[name].label)}`)
     present.forEach((p) => log(`           ${dim(ctx.rel(p))}`))
   }
-  if (!any) log(dim('nothing installed here. run: uitech init'))
+  if (!any) log(dim('nothing installed here. run: soureeui init'))
   log('')
 }
 
@@ -414,7 +414,7 @@ async function cmdRemove (opts) {
   }
 
   for (const p of targets) {
-    const isInstructionFile = /\.(md|mdc)$/.test(p) && !p.includes('ui-architect')
+    const isInstructionFile = /\.(md|mdc)$/.test(p) && !p.includes('soureeui')
     if (isInstructionFile) {
       const content = fs.readFileSync(p, 'utf8')
       const start = content.indexOf(MARK_BEGIN)
@@ -435,20 +435,20 @@ async function cmdRemove (opts) {
 
 function help () {
   log(`
-${bold('uitech')} ${dim('- install the UI Architect design skill into your AI coding agent')}
+${bold('soureeui')} ${dim('- install the UI Architect design skill into your AI coding agent')}
 
 ${bold('Usage')}
-  uitech init [--ai <agents>] [options]
-  uitech list
-  uitech doctor
-  uitech remove [--ai <agents>]
+  soureeui init [--ai <agents>] [options]
+  soureeui list
+  soureeui doctor
+  soureeui remove [--ai <agents>]
 
 ${bold('Examples')}
-  ${dim('$')} uitech init --ai cursor
-  ${dim('$')} uitech init --ai claude,codex
-  ${dim('$')} uitech init --ai all
-  ${dim('$')} uitech init --ai claude --global
-  ${dim('$')} uitech init                    ${dim('detects what the project uses, or asks')}
+  ${dim('$')} soureeui init --ai cursor
+  ${dim('$')} soureeui init --ai claude,codex
+  ${dim('$')} soureeui init --ai all
+  ${dim('$')} soureeui init --ai claude --global
+  ${dim('$')} soureeui init                    ${dim('detects what the project uses, or asks')}
 
 ${bold('Agents')}
   ${NAMES.join(', ')}, all
@@ -484,7 +484,7 @@ async function main () {
     case 'status': return cmdDoctor(opts)
     case 'remove':
     case 'uninstall': return cmdRemove(opts)
-    default: return fail(`unknown command: ${cmd}\n       try: uitech --help`)
+    default: return fail(`unknown command: ${cmd}\n       try: soureeui --help`)
   }
 }
 
