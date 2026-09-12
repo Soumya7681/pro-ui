@@ -3,7 +3,8 @@
 #
 #   ./install.sh <target-dir> [agent ...]
 #
-# Agents: claude | claude-global | codex | cursor | windsurf | gemini | copilot | generic | all
+# Agents: claude | claude-global | codex | antigravity | cursor | windsurf | gemini |
+#         copilot | generic | all
 # Default: claude codex
 #
 # The skill body is copied to <target>/.ui-architect/ (except for claude, which
@@ -16,7 +17,7 @@ SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MARK_BEGIN="<!-- ui-architect:begin -->"
 MARK_END="<!-- ui-architect:end -->"
 
-usage() { sed -n '2,14p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
+usage() { sed -n '2,15p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
 
 [ $# -ge 1 ] || usage 1
 case "$1" in -h|--help) usage 0 ;; esac
@@ -25,7 +26,7 @@ TARGET="$(cd "$1" 2>/dev/null && pwd)" || { echo "error: no such directory: $1" 
 shift
 AGENTS=("$@")
 [ ${#AGENTS[@]} -gt 0 ] || AGENTS=(claude codex)
-[ "${AGENTS[0]}" = all ] && AGENTS=(claude codex cursor windsurf gemini copilot)
+[ "${AGENTS[0]}" = all ] && AGENTS=(claude codex antigravity cursor windsurf gemini copilot)
 
 copy_body() { # $1 = destination dir
   mkdir -p "$1"
@@ -94,6 +95,13 @@ RULE
   echo "  + rule written to .cursor/rules/ui-architect.mdc"
 }
 
+install_antigravity() {
+  local rule="$TARGET/.agents/rules/ui-architect.md"
+  mkdir -p "$(dirname "$rule")"
+  pointer_text ".ui-architect/AGENTS.md" >"$rule"
+  echo "  + rule written to .agents/rules/ui-architect.md"
+}
+
 install_windsurf() {
   local rule="$TARGET/.windsurf/rules/ui-architect.md"
   mkdir -p "$(dirname "$rule")"
@@ -107,6 +115,7 @@ for agent in "${AGENTS[@]}"; do
     claude)        install_claude ;;
     claude-global) install_claude_global ;;
     codex)         install_body; append_pointer "$TARGET/AGENTS.md" ".ui-architect/AGENTS.md" ;;
+    antigravity)   install_body; append_pointer "$TARGET/AGENTS.md" ".ui-architect/AGENTS.md"; install_antigravity ;;
     cursor)        install_body; install_cursor ;;
     windsurf)      install_body; install_windsurf ;;
     gemini)        install_body; append_pointer "$TARGET/GEMINI.md" ".ui-architect/AGENTS.md" ;;
