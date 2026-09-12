@@ -1,6 +1,8 @@
 # UI Architect
 
-> A portable UI/UX design skill for AI coding agents — Claude Code, Codex, Cursor, Windsurf, Gemini CLI, Copilot, and anything else that reads project instructions.
+> A portable UI/UX design skill for AI coding agents — Claude Code, Codex, Antigravity, Cursor, Windsurf, Gemini CLI, Copilot, and anything else that reads project instructions.
+
+**Repository:** https://github.com/shree2698/pro-ui
 
 Coding agents left alone produce a recognizable interface: purple gradient hero, giant centered heading, three identical feature cards, glass everywhere, everything rounded, lorem-adjacent copy. Competent, symmetrical, and indistinguishable from ten thousand other products.
 
@@ -33,28 +35,144 @@ Framework-agnostic by design — it inspects the project before recommending any
 ## Install
 
 ```bash
-git clone <this-repo> ui-architect
+git clone https://github.com/shree2698/pro-ui.git ui-architect
 cd ui-architect
 ./install.sh /path/to/your/project            # Claude Code + Codex (default)
 ./install.sh /path/to/your/project all        # every supported agent
-./install.sh /path/to/your/project cursor     # one specific agent
+./install.sh /path/to/your/project antigravity cursor
 ./install.sh . claude-global                  # Claude Code, every project on this machine
 ```
 
-| Agent | Where it lands | How it activates |
+The skill body is copied once to `.ui-architect/` in the target project. Every agent
+gets a small pointer file that tells it to read `.ui-architect/AGENTS.md` on UI work,
+so there is one copy of the content no matter how many agents are installed. Claude Code
+is the exception: it uses its own skills directory, where `SKILL.md` loads natively.
+
+Pointer blocks are fenced with `<!-- ui-architect:begin -->` markers and written once.
+Re-running the installer refreshes the body without duplicating instructions.
+
+| Agent | Installs to | Activation |
 |---|---|---|
-| `claude` | `.claude/skills/ui-architect/` | Loads automatically on UI work; `/ui-architect` to invoke by name |
-| `claude-global` | `~/.claude/skills/ui-architect/` | Same, available in every project |
-| `codex` | `.ui-architect/` + pointer in `AGENTS.md` | Read on UI tasks |
+| `claude` | `.claude/skills/ui-architect/` | Loads automatically on UI work; `/ui-architect` invokes it by name |
+| `claude-global` | `~/.claude/skills/ui-architect/` | Same, available in every project on the machine |
+| `codex` | `.ui-architect/` + pointer in `AGENTS.md` | Read at the start of UI tasks |
+| `antigravity` | `.ui-architect/` + pointer in `AGENTS.md` and `.agents/rules/ui-architect.md` | Workspace rule, applied on UI work |
 | `cursor` | `.ui-architect/` + `.cursor/rules/ui-architect.mdc` | Rule attaches on UI work |
 | `windsurf` | `.ui-architect/` + `.windsurf/rules/ui-architect.md` | Rule attaches on UI work |
-| `gemini` | `.ui-architect/` + pointer in `GEMINI.md` | Read on UI tasks |
-| `copilot` | `.ui-architect/` + pointer in `.github/copilot-instructions.md` | Read on UI tasks |
+| `gemini` | `.ui-architect/` + pointer in `GEMINI.md` | Read at the start of UI tasks |
+| `copilot` | `.ui-architect/` + pointer in `.github/copilot-instructions.md` | Read at the start of UI tasks |
 | `generic` | `.ui-architect/` only | Point your own agent at `.ui-architect/AGENTS.md` |
 
-Pointer blocks are fenced with `<!-- ui-architect:begin -->` markers and appended once — re-running the installer updates the body without duplicating instructions.
+---
 
-For any agent not listed: copy `AGENTS.md`, `references/`, and `templates/` somewhere in the project and tell the agent to read `AGENTS.md` before UI work. That is the whole integration.
+### Claude Code
+
+```bash
+./install.sh /path/to/your/project claude     # this project only
+./install.sh . claude-global                  # every project on this machine
+```
+
+Lands in `.claude/skills/ui-architect/` (or `~/.claude/skills/ui-architect/`) with `SKILL.md`,
+`references/`, and `templates/`. Claude Code reads the frontmatter description and loads the
+skill on its own when a task touches UI. Invoke it explicitly with `/ui-architect`.
+
+Manual equivalent:
+
+```bash
+mkdir -p .claude/skills/ui-architect
+cp SKILL.md .claude/skills/ui-architect/
+cp -r references templates .claude/skills/ui-architect/
+```
+
+### Codex
+
+```bash
+./install.sh /path/to/your/project codex
+```
+
+Copies the body to `.ui-architect/` and appends a pointer block to the project's root
+`AGENTS.md`, creating it if absent. Codex reads `AGENTS.md` at the start of a session, sees
+the pointer, and loads `.ui-architect/AGENTS.md` when the work is UI work.
+
+Manual equivalent: copy `AGENTS.md`, `references/`, and `templates/` into `.ui-architect/`,
+then add to your root `AGENTS.md`:
+
+```markdown
+## UI / UX work
+
+Before any task that touches UI, UX, layout, visual design, styling, components,
+responsive behavior, or a redesign, read `.ui-architect/AGENTS.md` and follow it.
+```
+
+### Antigravity
+
+```bash
+./install.sh /path/to/your/project antigravity
+```
+
+Writes both entry points Antigravity reads: a pointer in the root `AGENTS.md`, which is the
+cross-tool foundation, and a workspace rule at `.agents/rules/ui-architect.md`. Older
+Antigravity builds read `.agent/rules/` instead; copy the same file there if yours does.
+
+For a machine-wide install, add the pointer block to `~/.gemini/GEMINI.md`. Note the
+precedence: `GEMINI.md` overrides `AGENTS.md`, and `.agents/rules/` files apply last.
+
+### Cursor
+
+```bash
+./install.sh /path/to/your/project cursor
+```
+
+Writes `.cursor/rules/ui-architect.mdc` with `alwaysApply: false` and a description scoped to
+UI work, so the rule attaches when the task is relevant instead of sitting in every context.
+
+### Windsurf
+
+```bash
+./install.sh /path/to/your/project windsurf
+```
+
+Writes `.windsurf/rules/ui-architect.md`.
+
+### Gemini CLI
+
+```bash
+./install.sh /path/to/your/project gemini
+```
+
+Appends the pointer to the project's `GEMINI.md`. For every project on the machine, add the
+same block to `~/.gemini/GEMINI.md`.
+
+### GitHub Copilot
+
+```bash
+./install.sh /path/to/your/project copilot
+```
+
+Appends the pointer to `.github/copilot-instructions.md`.
+
+### Any other agent
+
+```bash
+./install.sh /path/to/your/project generic
+```
+
+Copies `AGENTS.md`, `references/`, and `templates/` to `.ui-architect/` and stops. Point your
+agent at `.ui-architect/AGENTS.md` however it takes standing instructions: an instructions
+file, a rules directory, a system prompt, or a memory entry. Any agent that reads `AGENTS.md`
+at the repository root works with the `codex` target as-is.
+
+That is the whole integration. There is no runtime, no dependency, and nothing to build.
+
+### Uninstall
+
+```bash
+rm -rf .ui-architect .claude/skills/ui-architect .cursor/rules/ui-architect.mdc \
+       .windsurf/rules/ui-architect.md .agents/rules/ui-architect.md
+```
+
+Then delete the block between the `<!-- ui-architect:begin -->` and `<!-- ui-architect:end -->`
+markers from any instruction file it was appended to.
 
 ---
 
