@@ -1,6 +1,6 @@
 {
   "name": "soureeui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Install the UI Architect design skill into Claude Code, Codex, Antigravity, Cursor, Windsurf, Gemini CLI, or Copilot, so the agent designs before it codes instead of producing generic AI-looking UI.",
   "bin": {
     "soureeui": "bin/soureeui.js"
