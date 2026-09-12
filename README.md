@@ -35,35 +35,35 @@ Framework-agnostic by design — it inspects the project before recommending any
 ## Install
 
 ```bash
-npx proui init --ai cursor
+npx uitech init --ai cursor
 ```
 
 That is the whole installation. No clone, no dependency, nothing to build.
 
 ```bash
-npx proui init --ai claude,codex     # several at once
-npx proui init --ai all              # every supported agent
-npx proui init --ai claude --global  # every project on this machine
-npx proui init                       # detects what the project uses, or asks
+npx uitech init --ai claude,codex     # several at once
+npx uitech init --ai all              # every supported agent
+npx uitech init --ai claude --global  # every project on this machine
+npx uitech init                       # detects what the project uses, or asks
 ```
 
 Install it permanently if you set up projects often:
 
 ```bash
-npm install -g proui
-proui init --ai antigravity
+npm install -g uitech
+uitech init --ai antigravity
 ```
 
 ### Commands
 
 | Command | Does |
 |---|---|
-| `proui init --ai <agents>` | Install the skill for one or more agents |
-| `proui init` | Detect the agents the project already uses, or ask |
-| `proui update` | Refresh an existing install to the current version |
-| `proui doctor` | Show what is installed and where |
-| `proui remove [--ai <agents>]` | Uninstall, cleaning pointer blocks out of instruction files |
-| `proui list` | List supported agents |
+| `uitech init --ai <agents>` | Install the skill for one or more agents |
+| `uitech init` | Detect the agents the project already uses, or ask |
+| `uitech update` | Refresh an existing install to the current version |
+| `uitech doctor` | Show what is installed and where |
+| `uitech remove [--ai <agents>]` | Uninstall, cleaning pointer blocks out of instruction files |
+| `uitech list` | List supported agents |
 
 ### Options
 
@@ -95,8 +95,8 @@ directory, where `SKILL.md` loads natively.
 | `generic` | `.ui-architect/` only | Point your own agent at `.ui-architect/AGENTS.md` |
 
 Pointer blocks are fenced with `<!-- ui-architect:begin -->` markers and written once.
-Re-running is safe: `proui update` refreshes the body and the pointer in place, and
-`proui remove` takes the block back out without touching the rest of your instruction file.
+Re-running is safe: `uitech update` refreshes the body and the pointer in place, and
+`uitech remove` takes the block back out without touching the rest of your instruction file.
 
 With `--global`, Claude Code installs to `~/.claude/skills/ui-architect/`, and Antigravity
 and Gemini CLI write their pointer to `~/.gemini/GEMINI.md`.
@@ -105,29 +105,29 @@ and Gemini CLI write their pointer to `~/.gemini/GEMINI.md`.
 
 ### Agent notes
 
-**Claude Code** — `proui init --ai claude`. Reads the frontmatter description and loads the
+**Claude Code** — `uitech init --ai claude`. Reads the frontmatter description and loads the
 skill by itself when a task touches UI. `/ui-architect` invokes it by name.
 
-**Codex** — `proui init --ai codex`. Appends the pointer to the project's root `AGENTS.md`,
+**Codex** — `uitech init --ai codex`. Appends the pointer to the project's root `AGENTS.md`,
 creating it if absent.
 
-**Antigravity** — `proui init --ai antigravity`. Writes both entry points Antigravity reads:
+**Antigravity** — `uitech init --ai antigravity`. Writes both entry points Antigravity reads:
 the cross-tool `AGENTS.md` and a workspace rule at `.agents/rules/ui-architect.md`. Older
 builds read `.agent/rules/` instead; copy the same file there if yours does. Precedence runs
 `GEMINI.md`, then `AGENTS.md`, then `.agents/rules/`, so a global install with `--global`
 lands in `~/.gemini/GEMINI.md` and wins over the project file.
 
-**Cursor** — `proui init --ai cursor`. Writes `.cursor/rules/ui-architect.mdc` with
+**Cursor** — `uitech init --ai cursor`. Writes `.cursor/rules/ui-architect.mdc` with
 `alwaysApply: false` and a UI-scoped description, so the rule attaches when it is relevant
 instead of sitting in every context.
 
-**Windsurf** — `proui init --ai windsurf`. Writes `.windsurf/rules/ui-architect.md`.
+**Windsurf** — `uitech init --ai windsurf`. Writes `.windsurf/rules/ui-architect.md`.
 
-**Gemini CLI** — `proui init --ai gemini`, or add `--global` for `~/.gemini/GEMINI.md`.
+**Gemini CLI** — `uitech init --ai gemini`, or add `--global` for `~/.gemini/GEMINI.md`.
 
-**GitHub Copilot** — `proui init --ai copilot`. Appends to `.github/copilot-instructions.md`.
+**GitHub Copilot** — `uitech init --ai copilot`. Appends to `.github/copilot-instructions.md`.
 
-**Anything else** — `proui init --ai generic` copies the body and stops. Point your agent at
+**Anything else** — `uitech init --ai generic` copies the body and stops. Point your agent at
 `.ui-architect/AGENTS.md` however it takes standing instructions: an instructions file, a
 rules directory, a system prompt, or a memory entry. Any agent that reads a root `AGENTS.md`
 works with `--ai codex` as-is.
@@ -162,7 +162,7 @@ SKILL.md        entry point for Claude Code (frontmatter + core rules)
 AGENTS.md       entry point for every other agent (same core, no frontmatter)
 references/     loaded on demand, only when the task calls for it
 templates/      fill-in artifacts the agent produces
-bin/proui.js    the CLI, zero dependencies, Node 18+
+bin/uitech.js    the CLI, zero dependencies, Node 18+
 ```
 
 Both entry points are short on purpose. The depth sits in `references/`, read only when relevant, so a small styling fix does not drag a design-system essay into context.

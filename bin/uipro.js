@@ -336,7 +336,7 @@ async function cmdInit (opts) {
   const agents = await pickAgents(opts)
 
   log('')
-  log(`${bold('proui')} ${dim('v' + PKG.version)}  ${opts.dir}${opts.dryRun ? yellow('  dry run') : ''}`)
+  log(`${bold('uitech')} ${dim('v' + PKG.version)}  ${opts.dir}${opts.dryRun ? yellow('  dry run') : ''}`)
   log('')
 
   for (const name of agents) {
@@ -357,9 +357,9 @@ function cmdList () {
   log(bold('Supported agents'))
   NAMES.forEach((n) => log(`  ${n.padEnd(12)} ${dim(AGENTS[n].label)}`))
   log('')
-  log(dim('  proui init --ai cursor'))
-  log(dim('  proui init --ai claude,codex'))
-  log(dim('  proui init --ai all'))
+  log(dim('  uitech init --ai cursor'))
+  log(dim('  uitech init --ai claude,codex'))
+  log(dim('  uitech init --ai all'))
   log('')
 }
 
@@ -375,7 +375,7 @@ function installedPaths (name, ctx) {
 
 function cmdDoctor (opts) {
   log('')
-  log(`${bold('proui doctor')}  ${dim(opts.dir)}`)
+  log(`${bold('uitech doctor')}  ${dim(opts.dir)}`)
   log('')
   const ctx = makeCtx(opts, [])
   let any = false
@@ -386,7 +386,7 @@ function cmdDoctor (opts) {
     log(`${green('installed')}  ${bold(AGENTS[name].label)}`)
     present.forEach((p) => log(`           ${dim(ctx.rel(p))}`))
   }
-  if (!any) log(dim('nothing installed here. run: proui init'))
+  if (!any) log(dim('nothing installed here. run: uitech init'))
   log('')
 }
 
@@ -435,20 +435,20 @@ async function cmdRemove (opts) {
 
 function help () {
   log(`
-${bold('proui')} ${dim('- install the UI Architect design skill into your AI coding agent')}
+${bold('uitech')} ${dim('- install the UI Architect design skill into your AI coding agent')}
 
 ${bold('Usage')}
-  proui init [--ai <agents>] [options]
-  proui list
-  proui doctor
-  proui remove [--ai <agents>]
+  uitech init [--ai <agents>] [options]
+  uitech list
+  uitech doctor
+  uitech remove [--ai <agents>]
 
 ${bold('Examples')}
-  ${dim('$')} proui init --ai cursor
-  ${dim('$')} proui init --ai claude,codex
-  ${dim('$')} proui init --ai all
-  ${dim('$')} proui init --ai claude --global
-  ${dim('$')} proui init                    ${dim('detects what the project uses, or asks')}
+  ${dim('$')} uitech init --ai cursor
+  ${dim('$')} uitech init --ai claude,codex
+  ${dim('$')} uitech init --ai all
+  ${dim('$')} uitech init --ai claude --global
+  ${dim('$')} uitech init                    ${dim('detects what the project uses, or asks')}
 
 ${bold('Agents')}
   ${NAMES.join(', ')}, all
@@ -484,7 +484,7 @@ async function main () {
     case 'status': return cmdDoctor(opts)
     case 'remove':
     case 'uninstall': return cmdRemove(opts)
-    default: return fail(`unknown command: ${cmd}\n       try: proui --help`)
+    default: return fail(`unknown command: ${cmd}\n       try: uitech --help`)
   }
 }
 

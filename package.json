@@ -1,9 +1,9 @@
 {
-  "name": "proui",
+  "name": "uitech",
   "version": "1.0.0",
   "description": "Install the UI Architect design skill into Claude Code, Codex, Antigravity, Cursor, Windsurf, Gemini CLI, or Copilot, so the agent designs before it codes instead of producing generic AI-looking UI.",
   "bin": {
-    "proui": "bin/proui.js"
+    "uitech": "bin/uitech.js"
   },
   "files": [
     "bin",
@@ -42,6 +42,6 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "node bin/proui.js --help > /dev/null && node bin/proui.js list > /dev/null && echo ok"
+    "test": "node bin/uitech.js --help > /dev/null && node bin/uitech.js list > /dev/null && echo ok"
   }
 }
