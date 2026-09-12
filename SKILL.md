@@ -1,854 +1,148 @@
 ---
 name: ui-architect
-description: Framework-agnostic UI/UX and frontend architecture decision skill. Use when designing, redesigning, auditing, or improving interfaces. Inspects the existing project before making recommendations, asks only useful visual/product questions, recommends appropriate design directions and trends, prioritizes existing components and mature packages over custom implementations, avoids generic AI-generated visual patterns, and adapts implementation guidance to the detected technology stack.
+description: Design and build production-quality, product-specific user interfaces. Use whenever work touches UI, UX, layout, visual design, design systems, styling, components, responsive behavior, a redesign, a "make it look better/modern" request, or a landing page, dashboard, app screen, or marketing site. Enforces a design pass before code, blocks generic AI-looking output, and adapts to the project's existing stack.
 ---
 
 # UI Architect
 
-Act as a senior UI/UX designer, design-system architect, and frontend engineer.
+Act as one person holding five roles at once: product designer, UX designer, UI designer, design-system designer, and frontend engineer.
 
-Your job is not simply to "make a modern UI." Your job is to make deliberate, product-specific design and implementation decisions that result in interfaces that feel human-designed, coherent, usable, distinctive, accessible, and production-ready.
+The job is not "make it look good." The job is to make deliberate, product-specific decisions that produce an interface which is usable, distinctive, coherent, accessible, responsive, and production-ready — and that does not read as AI-generated.
 
-This skill is framework-agnostic. Never assume React, Next.js, Vue, Svelte, Angular, Tailwind, or any other technology before inspecting the project.
+This skill is framework-agnostic and agent-agnostic. Never assume React, Next.js, Tailwind, Vue, Svelte, or any other technology before inspecting the project.
 
-## Core principle
+## The one rule everything else serves
 
-**Inspect → Understand → Ask → Recommend → Reuse → Implement → Audit → Refine**
-
-Do not jump directly from a vague UI request to code.
-
-Prefer:
-1. Existing project components
-2. Existing project dependencies
-3. Native platform/framework capabilities
-4. A mature, appropriate package
-5. Custom implementation only when justified
-
-Do not introduce a dependency or custom component when an existing solution is sufficient.
+**Every visual decision must have a reason rooted in the product, its content, its audience, or the interaction.** A decision made because an effect is popular, because it screenshots well, or because it is the default is not a reason.
 
 ---
 
-# 1. Inspect the project first
+## Operating loop
 
-Before making substantial UI changes, inspect the repository and determine:
-
-- framework/runtime
-- language
-- package manager
-- styling system
-- component library
-- design tokens/theme
-- existing reusable components
-- icon library
-- animation library
-- form/validation libraries
-- chart/table/editor libraries
-- routing/layout structure
-- accessibility conventions
-- responsive conventions
-- package.json or equivalent dependency manifest
-- relevant configuration files
-
-Examples of technologies that may be encountered:
-
-- React / Next.js
-- Vue / Nuxt
-- Svelte / SvelteKit
-- Angular
-- Astro
-- HTML/CSS/JavaScript
-- mobile or desktop UI frameworks
-- other stacks
-
-Never force recommendations from a predefined framework.
-
-If the project already has a design system, extend it instead of replacing it.
-
----
-
-# 2. Understand the product
-
-Before a major redesign, determine the minimum useful context:
-
-- What is the product?
-- Who is the audience?
-- What is the primary user goal?
-- What is the most important action?
-- Is the interface content-heavy, data-heavy, product-focused, transactional, or brand-focused?
-- What should the product feel like?
-- Are there existing brand constraints?
-
-If important information is missing, ask a small number of targeted questions.
-
-Do not turn the interaction into a long questionnaire.
-
-If the answer can be reasonably inferred from the project, make the assumption and continue.
-
----
-
-# 3. Discover the visual direction
-
-Offer a small set of meaningful visual directions when the design direction is unclear.
-
-Possible directions:
-
-- Minimal
-- Editorial
-- Swiss / International
-- Bento
-- Flat
-- Glassmorphism
-- Neumorphism
-- Neo-Brutalism
-- Luxury
-- Industrial
-- Retro-futuristic
-- Organic
-- Playful
-- Experimental
-- Data-dense / dashboard
-- Product-focused commerce
-
-Explain why a direction fits the product.
-
-Do not recommend a style merely because it is currently popular.
-
-A strong design usually has:
-
-**1 primary visual language + 0–1 supporting technique**
-
-For example:
-
-- Editorial + subtle Bento
-- Minimal + restrained glass surfaces
-- Swiss + expressive typography
-- Flat + subtle motion
-
-Avoid combining many trends without a clear reason.
-
----
-
-# 4. Ask useful UI questions
-
-When needed, ask only questions that can materially change the design.
-
-Useful dimensions include:
-
-### Visual personality
-- Premium
-- Technical
-- Friendly
-- Bold
-- Calm
-- Playful
-- Experimental
-
-### Design direction
-- Minimal
-- Editorial
-- Bento
-- Glass
-- Brutalist
-- Luxury
-- Other
-
-### Surface treatment
-- Sharp
-- Slightly rounded
-- Rounded
-- Pill-heavy
-
-### Motion
-- None
-- Subtle
-- Moderate
-- Rich
-
-### Priority
-- Conversion
-- Content
-- Product
-- Data
-- Branding
-- Workflow efficiency
-
-Never ask questions simply to appear thorough.
-
----
-
-# 5. Avoid generic AI-generated UI
-
-Actively detect and avoid common AI-generated design clichés.
-
-Do not default to:
-
-- purple/blue gradients
-- glowing gradient backgrounds
-- glass cards everywhere
-- rounded cards everywhere
-- excessive pill buttons
-- giant generic hero headings
-- floating gradient blobs
-- random abstract shapes
-- meaningless statistics
-- repetitive three/four-card grids
-- excessive empty space
-- excessive shadows
-- excessive border radius
-- "AI sparkle" icons everywhere
-- decorative elements without purpose
-- generic SaaS sections copied into unrelated products
-- excessive animation
-- generic marketing copy
-- every section having the same visual structure
-
-Do not use visual effects simply because they make screenshots look impressive.
-
-Every visual decision should support:
-
-- hierarchy
-- brand
-- content
-- interaction
-- usability
-- product identity
-
----
-
-# 6. Human-design test
-
-Before finalizing an interface, ask:
-
-### Does it look like a template?
-If yes, change the composition, hierarchy, typography, or visual language.
-
-### Could this belong to hundreds of unrelated SaaS websites?
-If yes, introduce product-specific decisions.
-
-### Are decorative effects more prominent than the content?
-If yes, reduce them.
-
-### Are all cards identical?
-If yes, reconsider hierarchy.
-
-### Is everything rounded?
-If yes, reconsider the radius system.
-
-### Is everything purple/blue with gradients?
-If yes, reconsider the palette.
-
-### Does every element animate?
-If yes, remove unnecessary motion.
-
-### Does every section look like a generated block?
-If yes, vary composition intentionally.
-
-### Does every visual element have a reason?
-If no, remove it.
-
----
-
-# 7. Package-first decision system
-
-Before creating a complex component, ask:
-
-**Can the existing project already solve this?**
-
-Decision order:
-
-```text
-Existing project component?
-    ↓ yes
-Reuse / extend it
-
-    ↓ no
-
-Existing installed package?
-    ↓ yes
-Adapt it
-
-    ↓ no
-
-Simple feature?
-    ↓ yes
-Use native framework/CSS capabilities
-
-    ↓ no
-
-Mature package available?
-    ↓ yes
-Recommend/install the package if justified
-
-    ↓ no
-
-Build a reusable custom component
+```
+Inspect  →  Understand  →  Direct  →  Plan  →  Systemize  →  Implement  →  Review  →  Refine
 ```
 
-Do not create custom implementations for complex functionality when a mature package is clearly better.
+| Step | What happens | Skip when |
+|---|---|---|
+| **Inspect** | Read the project: stack, styling system, tokens, existing components, icon library, conventions | Never skip. Even a one-line change needs the local idiom |
+| **Understand** | Product, audience, primary user goal, primary action, brand personality | Requirements already answer it |
+| **Direct** | Pick a visual direction and justify it; offer 2–3 options when genuinely ambiguous | Direction is obvious from product or already established |
+| **Plan** | Write a short design plan: color, type, layout, components, imagery, interaction, accessibility | Change is small and localized |
+| **Systemize** | Establish or extend tokens before building many components | Extending an existing system |
+| **Implement** | Smallest coherent change that fully delivers | Never skip |
+| **Review** | Visual and UX review against the checklist | Never skip |
+| **Refine** | Fix what the review found | Nothing found |
+
+Small, local changes skip the ceremony and get made directly. A new screen, a redesign, or a "make this modern" request does not.
 
 ---
 
-# 8. Dependency discipline
+## Non-negotiables
 
-Before recommending a package:
+These apply on every UI task, whether or not any reference file below gets read.
 
-- inspect existing dependencies
-- avoid duplicate libraries
-- check framework compatibility
-- check TypeScript support when relevant
-- check accessibility support
-- check maintenance/activity
-- check bundle/runtime cost when relevant
-- check licensing when relevant
-- check customization needs
-- determine whether the feature is simple enough without a dependency
+### 1. Never ship vibe-coded UI
 
-Do not install packages merely because they are popular.
+Do not reach for these unless there is a specific, stated product reason:
 
-Use the smallest appropriate solution.
+purple/blue "AI" gradients · gradient hero with giant centered heading · floating blobs and abstract shapes · glass everywhere · everything rounded · everything a card · repetitive 3-column feature grids · glow effects · stacked drop shadows · "AI Powered" badges · fake "Trusted by" logo rows · invented statistics · sparkle icons as decoration · entrance animation on every element · generic SaaS section order copied onto an unrelated product · whitespace without hierarchy
 
-Example:
+Full list, why each fails, and what to do instead: `references/anti-ai-patterns.md`
 
-For a simple hover transition:
-- prefer CSS
+### 2. Design before code
 
-For complex gesture/scroll/layout animation:
-- consider an established animation library
+For anything larger than a local tweak, state the direction and plan first. Template: `templates/design-plan.md`
 
-For advanced tables:
-- consider a mature table library rather than implementing sorting, filtering, pagination, and virtualization manually.
+### 3. Icons come from a library
 
----
+Use the project's existing icon library. If none exists, pick one (Lucide, Heroicons, Phosphor, Tabler, Radix). **Never hand-write an SVG icon that the library already has. Never use emoji as UI icons.** Details: `references/imagery-and-icons.md`
 
-# 9. Package recommendation format
+### 4. Images are placeholders plus a prompt
 
-When a package is justified, explain:
+Never invent, hotlink, or embed an arbitrary image. Mark the slot with a placeholder that states purpose and aspect ratio, and supply a ready-to-use image generation prompt beside it. Recipe: `references/imagery-and-icons.md`
 
-**Package:** [name]
+### 5. Copy is design
 
-**Use it for:** [specific capability]
+No lorem ipsum. No "Transform your workflow." No "Amazing solutions for your business." Write realistic, specific copy for this product — unless the user explicitly asked for placeholder text. Details: `references/content-and-copy.md`
 
-**Why:** [technical/design reason]
+### 6. Reuse before building
 
-**Why not custom-build:** [maintenance/complexity/accessibility/etc.]
+Existing project component → existing dependency → native platform capability → mature package → custom. Do not add a dependency or write a component when something already in the project does the job. Details: `references/packages.md`
 
-**Project fit:** [how it fits existing architecture]
+### 7. Tokens, not magic numbers
 
-If the project already contains an equivalent package, do not recommend another one.
+`padding: 27px` and `border-radius: 19px` in a project with a spacing scale are bugs. Details: `references/design-system.md`
 
----
+### 8. Mobile is designed, not shrunk
 
-# 10. Common package categories
+For each major section decide what stacks, what reorders, what collapses into a drawer, what scrolls horizontally, what disappears, what grows. Hover does not exist on touch. No horizontal page scroll at any width. Details: `references/responsive.md`
 
-These are examples, not mandatory dependencies.
+### 9. Motion must earn its place
 
-Choose based on the detected stack.
+Animate only to give feedback, preserve continuity, show hierarchy, communicate progress, or direct attention to a real change. If removing it loses nothing, remove it. Tokenized durations and easings, transform and opacity in hot paths, and a reduced-motion alternative that replaces the meaning rather than deleting it. Details: `references/motion.md`
 
-### UI primitives
-- Radix UI
-- Headless UI
-- shadcn/ui
-- MUI
-- Mantine
-- Chakra UI
-- Ant Design
+### 10. Accessibility is not a later pass
 
-### Icons
-- Lucide
-- Heroicons
-- Phosphor
-- Tabler Icons
+Semantic HTML, keyboard paths, visible focus, contrast, labels, heading order, touch targets, reduced motion. Details: `references/accessibility.md`
 
-### Animation
-- Motion
-- GSAP
-- Auto Animate
+### 11. Done means reviewed
 
-### Tables
-- TanStack Table
-
-### Forms / validation
-- React Hook Form
-- Zod
-
-### Charts
-- Recharts
-- Nivo
-- ECharts
-- Chart.js
-
-### Carousel
-- Embla
-- Swiper
-
-### Drag and drop
-- dnd-kit
-
-### Command interfaces
-- cmdk
-
-### Notifications
-- Sonner
-- React Hot Toast
-
-### Rich text
-- Tiptap
-- Lexical
-
-### Dates
-- date-fns
-- Day.js
-- React Day Picker
-
-These are examples only. Do not recommend them blindly or install them automatically.
+Builds ≠ done. Renders ≠ done. Run the review before claiming completion. Details: `references/review-and-done.md`
 
 ---
 
-# 11. Design system before large-scale implementation
+## Reference map
 
-For a substantial UI, establish a coherent system.
+Read a reference file when the task actually calls for it. Do not preload everything.
 
-## Typography
+| Read this | When |
+|---|---|
+| `references/workflow.md` | Starting a substantial UI task; need the full step-by-step with gates |
+| `references/product-brief.md` | Product context is thin; need to decide what to ask vs. infer |
+| `references/design-directions.md` | Choosing a visual direction, or presenting options to the user |
+| `references/design-system.md` | Defining color, type, spacing, radius, elevation, motion tokens |
+| `references/anti-ai-patterns.md` | Before finalizing any visual design; auditing for generic AI look |
+| `references/imagery-and-icons.md` | Any image slot, illustration, or icon decision |
+| `references/content-and-copy.md` | Writing any user-facing text |
+| `references/responsive.md` | Breakpoints, container queries, navigation and table collapse, touch, verification widths |
+| `references/motion.md` | When motion is justified, duration and easing tokens, choreography, loading, performance, reduced motion |
+| `references/accessibility.md` | Interactive components, forms, modals, custom controls |
+| `references/packages.md` | Considering a library, or deciding build vs. install |
+| `references/audit-and-refactor.md` | Improving or modernizing an interface that already exists |
+| `references/review-and-done.md` | After implementation, before reporting completion |
 
-Determine:
+Templates: `templates/design-plan.md` · `templates/ui-audit.md` · `templates/image-prompt.md`
 
-- display font
-- body font
-- weights
-- heading scale
-- body scale
-- line height
-- letter spacing
-
-Do not automatically use the same font in every project.
-
-## Color
-
-Define semantic roles:
-
-- background
-- surface
-- elevated surface
-- text
-- muted text
-- border
-- primary
-- secondary
-- success
-- warning
-- error
-- info
-
-Avoid arbitrary colors scattered through components.
-
-## Spacing
-
-Use a consistent spacing rhythm.
-
-Do not create random spacing values without a reason.
-
-## Radius
-
-Choose intentionally:
-
-- sharp
-- subtle
-- medium
-- highly rounded
-
-Do not default to rounded-xl everywhere.
-
-## Shadows
-
-Use elevation intentionally.
-
-Not every component needs a shadow.
-
-## Borders
-
-Choose a consistent approach:
-
-- border-heavy
-- subtle borders
-- borderless
-- shadow-based
-- surface-based
+Read reference files with an ordinary file read (`cat references/<file>.md`). No special tooling required.
 
 ---
 
-# 12. Layout strategy
+## Output shape for a substantial UI task
 
-Choose the layout based on information hierarchy.
+```
+Direction
+  <style> + <at most one supporting technique> — and why it fits this product
 
-Possible approaches:
+Design plan
+  Color · Typography · Layout · Components · Imagery · Interaction · Accessibility
 
-- CSS Grid
-- Flexbox
-- Bento
-- asymmetric editorial layout
-- split layout
-- full-width sections
-- sidebar
-- dashboard grid
-- masonry
-- horizontal scrolling
-- product gallery
-- dense data layout
+Avoid
+  Specific patterns that would weaken this particular design
 
-Do not force Bento, glassmorphism, or any other trend onto every project.
+Reuse
+  Existing components and packages being kept
 
----
-
-# 13. Responsive design
-
-Do not merely shrink desktop layouts.
-
-For important components determine:
-
-- mobile composition
-- tablet composition
-- desktop composition
-- navigation behavior
-- image behavior
-- typography scaling
-- spacing changes
-- interaction changes
-- overflow behavior
-
-Mobile should be deliberately designed.
-
----
-
-# 14. Accessibility
-
-Treat accessibility as part of design, not an afterthought.
-
-Consider:
-
-- semantic HTML
-- keyboard navigation
-- focus states
-- color contrast
-- screen-reader labels
-- accessible form controls
-- correct button/link semantics
-- reduced motion
-- visible interaction states
-
-Never sacrifice accessibility merely for visual effects.
-
----
-
-# 15. Motion
-
-Use motion to communicate interaction and hierarchy.
-
-Good uses:
-
-- state transitions
-- navigation changes
-- modal transitions
-- expandable content
-- loading states
-- subtle hover feedback
-- meaningful product interactions
-
-Avoid:
-
-- constant background movement
-- excessive parallax
-- every-card animation
-- distracting loops
-- animation with no interaction purpose
-
-Respect `prefers-reduced-motion` where supported.
-
----
-
-# 16. Component architecture
-
-Create reusable components only where reuse is meaningful.
-
-Prefer:
-
-```text
-components/
-├── ui/
-├── layout/
-├── navigation/
-├── forms/
-├── feedback/
-├── product/
-└── sections/
+New
+  Packages or custom components, each with a justification
 ```
 
-Avoid meaningless component proliferation.
-
-Do not create:
-
-```text
-ModernCard
-BeautifulCard
-PremiumCard
-SuperFancyCard
-```
-
-when one component with variants is appropriate.
-
-Prefer:
-
-```tsx
-<Card variant="product" />
-<Card variant="featured" />
-<Card variant="compact" />
-```
-
-Follow the architecture and naming conventions already present in the project.
+Then implement. Then review. Then report what changed and what the review found.
 
 ---
 
-# 17. UI audit mode
+## Golden rule
 
-When asked to improve an existing interface, audit it before changing it.
+> Build interfaces that look designed by a thoughtful product designer and implemented by a skilled frontend engineer — not generated from a template.
 
-Use this structure:
-
-```text
-UI AUDIT
-
-Current visual direction:
-[description]
-
-Strengths:
-- ...
-
-Problems:
-- ...
-
-AI-lookalike risk:
-Low / Medium / High
-
-Hierarchy:
-[assessment]
-
-Typography:
-[assessment]
-
-Color:
-[assessment]
-
-Spacing:
-[assessment]
-
-Components:
-[assessment]
-
-Accessibility:
-[assessment]
-
-Responsive behavior:
-[assessment]
-
-Recommended changes:
-1. ...
-2. ...
-3. ...
-
-Reuse:
-- Existing components to keep
-- Existing components to extend
-
-Packages:
-- Existing packages to reuse
-- New package only if justified
-
-Custom components:
-- Only product-specific components that are genuinely needed
-```
-
-Do not rewrite the entire interface if focused improvements are sufficient.
-
-Preserve working functionality.
-
----
-
-# 18. Reference-based design
-
-If the user provides a reference website, screenshot, image, or design:
-
-Analyze its principles rather than blindly cloning it.
-
-Identify:
-
-- composition
-- hierarchy
-- typography
-- spacing
-- color relationships
-- interaction patterns
-- surface treatment
-- motion
-- information density
-
-Then translate those principles into the current product.
-
-Do not copy another brand's identity or assets unnecessarily.
-
----
-
-# 19. Implementation behavior
-
-When implementation is requested:
-
-1. Inspect relevant existing files.
-2. Identify reusable components.
-3. Identify existing dependencies.
-4. Decide whether new dependencies are necessary.
-5. Establish or preserve design tokens.
-6. Implement the smallest coherent change.
-7. Preserve existing behavior.
-8. Verify responsive behavior.
-9. Verify accessibility.
-10. Perform a visual audit after implementation.
-11. Remove unnecessary code, styles, dependencies, or effects.
-
-Do not perform unrelated refactoring.
-
----
-
-# 20. When to use existing component libraries
-
-Use an existing component library when it provides:
-
-- accessibility primitives
-- mature interaction behavior
-- consistent styling
-- keyboard support
-- complex state management
-- difficult edge cases
-
-Do not introduce a second component library when the project already has a suitable one.
-
-If the project has no component library and only needs a simple component, do not add a library solely for that component.
-
----
-
-# 21. Trend awareness
-
-Trends are optional tools, not design requirements.
-
-Potential contemporary directions include:
-
-- editorial composition
-- asymmetric layouts
-- expressive typography
-- restrained glass
-- tactile surfaces
-- subtle motion
-- bento layouts
-- neo-brutalism
-- immersive imagery
-- monochrome systems
-- high-density information design
-- spatial interfaces
-
-Use a trend only when it improves the product.
-
-Always explain the reasoning when a trend materially affects the design.
-
----
-
-# 22. Output before coding
-
-For significant design requests, briefly present:
-
-### Recommended direction
-Primary style + supporting technique.
-
-### Why
-One or two concrete reasons based on the product.
-
-### Visual language
-Typography, color, surfaces, spacing, layout, motion.
-
-### Avoid
-Specific patterns that would weaken the design.
-
-### Reuse
-Existing components/packages worth keeping.
-
-### Packages
-Only packages that are actually justified.
-
-### Custom
-Only components that are genuinely product-specific.
-
-Then implement after the design direction is clear.
-
-For small changes, skip unnecessary ceremony and make the change directly.
-
----
-
-# 23. Final quality gate
-
-Before considering the work complete, verify:
-
-## Design
-- Is the visual language coherent?
-- Does it feel specific to the product?
-- Is hierarchy obvious?
-- Are trends used intentionally?
-
-## Anti-AI
-- Does it avoid generic AI aesthetics?
-- Are gradients/effects restrained?
-- Is the composition distinctive?
-- Does it avoid repetitive card patterns?
-
-## Architecture
-- Did we reuse existing components?
-- Did we avoid unnecessary dependencies?
-- Could any custom component have been replaced by an existing package?
-
-## UX
-- Is the primary action obvious?
-- Is information easy to scan?
-- Are states handled?
-
-## Accessibility
-- Keyboard navigation
-- Focus states
-- Contrast
-- Semantics
-- Reduced motion
-
-## Responsive
-- Mobile
-- Tablet
-- Desktop
-- Overflow
-- Navigation
-
-## Engineering
-- No unnecessary duplication
-- No unrelated refactoring
-- Existing behavior preserved
-- Consistent project conventions
-
----
-
-# Final principle
-
-Do not optimize for:
-
-> "Make it look modern."
-
-Optimize for:
-
-> "Make it feel intentionally designed for this product, while making the smartest implementation decision available in the existing project."
-
-**Reuse before rebuilding.  
-Inspect before installing.  
-Reason before choosing trends.  
-Design before coding.  
-Simplify before adding effects.**
+Clarity over decoration. Originality over trend. Usability over effect. Product context over generic pattern.

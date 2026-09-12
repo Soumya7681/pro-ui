@@ -1,167 +1,113 @@
-# UI Architect Skill
+# UI Architect
 
-> **Role:** Senior UI/UX Designer · Design-System Architect · Frontend Engineer
+> A portable UI/UX design skill for AI coding agents — Claude Code, Codex, Cursor, Windsurf, Gemini CLI, Copilot, and anything else that reads project instructions.
 
-A framework-agnostic Antigravity skill that governs how UI design and implementation decisions are made — producing interfaces that feel **human-designed, coherent, distinctive, accessible, and production-ready**.
+Coding agents left alone produce a recognizable interface: purple gradient hero, giant centered heading, three identical feature cards, glass everywhere, everything rounded, lorem-adjacent copy. Competent, symmetrical, and indistinguishable from ten thousand other products.
 
----
-
-## What This Skill Does
-
-This skill activates a disciplined, product-specific design process whenever you work on UI. It prevents generic AI-generated aesthetics, enforces smart dependency decisions, and ensures every visual choice has a purpose.
-
-It does **not** assume any technology stack. It inspects the project first, then reasons about what to use.
+This skill replaces that default with a design process. When it is active, the agent works as a product designer, UX designer, UI designer, design-system designer, and frontend engineer — thinking about the product before writing code, and reviewing the result before calling it done.
 
 ---
 
-## Core Workflow
+## What it enforces
 
-```
-Inspect → Understand → Ask → Recommend → Reuse → Implement → Audit → Refine
-```
+| | |
+|---|---|
+| **Design before code** | Direction and plan first for anything larger than a local tweak |
+| **Product first** | Audience, primary goal, primary action, brand — inferred from the repo or asked in one short batch |
+| **Direction with a reason** | One visual language plus at most one supporting technique, chosen from the product, not from what is trending |
+| **No vibe-coded UI** | An explicit pattern ban list, a human-design test, and an originality floor |
+| **Real copy** | No lorem ipsum, no "Transform your workflow", no fabricated customers or metrics |
+| **Images as placeholders plus prompts** | Purpose, aspect ratio, negative space, alt text, and a paste-ready generation prompt |
+| **Icons from a library** | Never a hand-written SVG the library already has; never emoji as UI icons |
+| **Reuse before building** | Existing component → existing dependency → native capability → mature package → custom |
+| **Tokens, not magic numbers** | Color roles, type scale, spacing, radius, elevation, motion, breakpoints |
+| **Mobile designed, not shrunk** | Per-section decisions about what stacks, reorders, collapses, scrolls, grows; container queries over viewport guesses |
+| **Motion that earns its place** | Six legitimate jobs, tokenized durations and easings, transform-and-opacity performance, reduced motion that replaces meaning instead of deleting it |
+| **Accessibility during, not after** | Semantics, keyboard, focus, contrast, labels, touch targets, reduced motion |
+| **Done means reviewed** | Builds and renders are not done; a visual and UX review gate is |
 
-Never jump directly from a vague UI request to code.
-
----
-
-## Principles at a Glance
-
-| # | Principle | Summary |
-|---|-----------|---------|
-| 1 | **Inspect First** | Detect framework, language, styling system, component library, icons, routing, and config before touching anything |
-| 2 | **Understand the Product** | Know the audience, primary goal, content type, and brand constraints before redesigning |
-| 3 | **Visual Direction** | Offer a curated set of meaningful directions (Minimal, Editorial, Swiss, Bento, Brutalist, Luxury…) with product-fit reasoning |
-| 4 | **Targeted Questions** | Ask only questions that can materially change the design — no questionnaire theater |
-| 5 | **Anti-Generic AI** | Actively detect and reject purple gradients, glass cards everywhere, pill-heavy UIs, meaningless stats, and decorative noise |
-| 6 | **Human-Design Test** | Before finalizing, check: Does it look like a template? Could it belong to any SaaS? Are effects louder than content? |
-| 7 | **Package-First Decisions** | Reuse existing → adapt installed → use native → mature package → custom (in that order) |
-| 8 | **Dependency Discipline** | Check for duplicates, TS support, a11y, maintenance health, and bundle cost before recommending anything |
-| 9 | **Package Recommendation Format** | Always explain: what it's for, why it's justified, why not custom-built, how it fits the existing architecture |
-| 10 | **Common Package Categories** | Reference list of UI primitives, icons, animation, tables, forms, charts, drag-and-drop, notifications, rich text, dates |
-| 11 | **Design System First** | Establish typography scale, semantic color roles, spacing rhythm, radius system, shadow elevation, and border strategy before large-scale work |
-| 12 | **Layout Strategy** | Choose layout from Grid, Flexbox, Bento, Editorial, Sidebar, Dashboard, Masonry, etc. based on information hierarchy |
-| 13 | **Responsive Design** | Deliberately design for mobile, tablet, and desktop — don't just shrink the desktop layout |
-| 14 | **Accessibility** | Semantic HTML, keyboard nav, focus states, contrast, screen-reader labels, reduced motion — baked in, not bolted on |
-| 15 | **Motion** | Use motion to communicate state and hierarchy; avoid constant background movement or animation for its own sake |
-| 16 | **Component Architecture** | Create reusable components only where reuse is meaningful; prefer variants over proliferating named components |
-| 17 | **UI Audit Mode** | When improving existing UI, audit first (direction, strengths, problems, AI-lookalike risk, hierarchy, typography, color, a11y, responsiveness) |
-| 18 | **Reference-Based Design** | Analyze composition and principles from references — never blindly clone another brand's identity |
-| 19 | **Implementation Behavior** | Inspect → identify reuse → check deps → establish tokens → implement smallest coherent change → audit after |
-| 20 | **Component Library Usage** | Use libraries for accessibility primitives and complex interaction; don't add a second library when one already exists |
-| 21 | **Trend Awareness** | Trends are optional tools (editorial, asymmetric, expressive type, restrained glass, neo-brutalism…) — use only when they improve the product |
-| 22 | **Output Before Coding** | For significant requests, present direction + reasoning + visual language plan before writing any code |
-| 23 | **Final Quality Gate** | Verify design coherence, anti-AI aesthetics, component reuse, UX clarity, accessibility, responsiveness, and engineering conventions |
+Framework-agnostic by design — it inspects the project before recommending anything, and extends an existing design system rather than replacing it.
 
 ---
 
-## Design Directions Available
+## Install
 
-| Category | Options |
-|----------|---------|
-| **Style** | Minimal, Editorial, Swiss/International, Bento, Flat, Glassmorphism, Neumorphism, Neo-Brutalism, Luxury, Industrial, Retro-futuristic, Organic, Playful, Experimental |
-| **Layout** | CSS Grid, Flexbox, Bento, Asymmetric Editorial, Split, Full-width, Sidebar, Dashboard Grid, Masonry, Horizontal Scroll, Product Gallery, Dense Data |
-| **Motion** | None, Subtle, Moderate, Rich |
-| **Surface** | Sharp, Slightly Rounded, Rounded, Pill-heavy |
-| **Priority** | Conversion, Content, Product, Data, Branding, Workflow Efficiency |
-
----
-
-## Package Decision Order
-
-```
-Existing project component?  →  Reuse / extend it
-         ↓ no
-Existing installed package?  →  Adapt it
-         ↓ no
-Simple feature?              →  Use native framework/CSS
-         ↓ no
-Mature package available?    →  Recommend if justified
-         ↓ no
-                                Build a reusable custom component
+```bash
+git clone <this-repo> ui-architect
+cd ui-architect
+./install.sh /path/to/your/project            # Claude Code + Codex (default)
+./install.sh /path/to/your/project all        # every supported agent
+./install.sh /path/to/your/project cursor     # one specific agent
+./install.sh . claude-global                  # Claude Code, every project on this machine
 ```
 
----
+| Agent | Where it lands | How it activates |
+|---|---|---|
+| `claude` | `.claude/skills/ui-architect/` | Loads automatically on UI work; `/ui-architect` to invoke by name |
+| `claude-global` | `~/.claude/skills/ui-architect/` | Same, available in every project |
+| `codex` | `.ui-architect/` + pointer in `AGENTS.md` | Read on UI tasks |
+| `cursor` | `.ui-architect/` + `.cursor/rules/ui-architect.mdc` | Rule attaches on UI work |
+| `windsurf` | `.ui-architect/` + `.windsurf/rules/ui-architect.md` | Rule attaches on UI work |
+| `gemini` | `.ui-architect/` + pointer in `GEMINI.md` | Read on UI tasks |
+| `copilot` | `.ui-architect/` + pointer in `.github/copilot-instructions.md` | Read on UI tasks |
+| `generic` | `.ui-architect/` only | Point your own agent at `.ui-architect/AGENTS.md` |
 
-## Common Package Reference
+Pointer blocks are fenced with `<!-- ui-architect:begin -->` markers and appended once — re-running the installer updates the body without duplicating instructions.
 
-| Category | Options |
-|----------|---------|
-| UI Primitives | Radix UI, Headless UI, shadcn/ui, MUI, Mantine, Chakra UI, Ant Design |
-| Icons | Lucide, Heroicons, Phosphor, Tabler Icons |
-| Animation | Motion, GSAP, Auto Animate |
-| Tables | TanStack Table |
-| Forms / Validation | React Hook Form, Zod |
-| Charts | Recharts, Nivo, ECharts, Chart.js |
-| Carousel | Embla, Swiper |
-| Drag & Drop | dnd-kit |
-| Command | cmdk |
-| Notifications | Sonner, React Hot Toast |
-| Rich Text | Tiptap, Lexical |
-| Dates | date-fns, Day.js, React Day Picker |
-
-> These are examples — not mandatory dependencies. Always check the project's existing stack first.
+For any agent not listed: copy `AGENTS.md`, `references/`, and `templates/` somewhere in the project and tell the agent to read `AGENTS.md` before UI work. That is the whole integration.
 
 ---
 
-## UI Audit Report Format
-
-When improving an existing interface, the audit follows this structure:
+## How it is structured
 
 ```
-UI AUDIT
-
-Current visual direction: [description]
-
-Strengths:
-- ...
-
-Problems:
-- ...
-
-AI-lookalike risk: Low / Medium / High
-
-Hierarchy:     [assessment]
-Typography:    [assessment]
-Color:         [assessment]
-Spacing:       [assessment]
-Components:    [assessment]
-Accessibility: [assessment]
-Responsive:    [assessment]
-
-Recommended changes:
-1. ...
-2. ...
-
-Reuse:
-- Existing components to keep / extend
-
-Packages:
-- Existing packages to reuse / new package only if justified
-
-Custom:
-- Only product-specific components genuinely needed
+SKILL.md        entry point for Claude Code (frontmatter + core rules)
+AGENTS.md       entry point for every other agent (same core, no frontmatter)
+references/     loaded on demand, only when the task calls for it
+templates/      fill-in artifacts the agent produces
+install.sh      per-agent installer
 ```
+
+Both entry points are short on purpose. The depth sits in `references/`, read only when relevant, so a small styling fix does not drag a design-system essay into context.
+
+| Reference | Covers |
+|---|---|
+| `workflow.md` | The full loop with a gate per step, and how to scale it to request size |
+| `product-brief.md` | What to establish, what to infer, what is worth asking, sector conventions |
+| `design-directions.md` | 21 directions with fit and failure modes; how to present options; the originality floor |
+| `design-system.md` | Color roles, type scale, spacing, radius, elevation, borders, motion, breakpoints, states |
+| `anti-ai-patterns.md` | The pattern ban list with reasons and replacements; the human-design test |
+| `imagery-and-icons.md` | Icon library rules; placeholders, aspect ratios, generation prompts |
+| `content-and-copy.md` | Banned phrases, interface copy rules, voice, designing against real content |
+| `responsive.md` | Per-section breakpoint worksheet, container queries, layout patterns, tables and nav on small screens, touch input, verification widths |
+| `motion.md` | The six jobs motion may do, duration and easing tokens, choreography, per-component catalog, loading thresholds, performance, reduced-motion mapping |
+| `accessibility.md` | Structure, controls, keyboard, contrast, forms, content, quick verification |
+| `packages.md` | The build-vs-install ladder, evaluation criteria, category reference, component architecture |
+| `audit-and-refactor.md` | Diagnosing an existing interface; fixing in order of impact; scope discipline |
+| `review-and-done.md` | The visual and UX review checklist and the definition of done |
+
+| Template | Produced when |
+|---|---|
+| `design-plan.md` | Before implementing any non-trivial UI |
+| `ui-audit.md` | Before changing an interface that already exists |
+| `image-prompt.md` | Wherever an image slot needs an asset |
 
 ---
 
-## Final Principle
+## The loop
 
-> ❌ Don't optimize for: *"Make it look modern."*
->
-> ✅ Optimize for: *"Make it feel intentionally designed for this product, while making the smartest implementation decision available in the existing project."*
+```
+Inspect → Understand → Direct → Plan → Systemize → Implement → Review → Refine
+```
 
-**Reuse before rebuilding.**
-**Inspect before installing.**
-**Reason before choosing trends.**
-**Design before coding.**
-**Simplify before adding effects.**
+Each step has a gate. Inspect ends when the stack and reusable components are known. Understand ends when the primary user goal and primary action can be stated in one sentence each. Direct ends when the direction has a product-specific reason. And so on through a review that happens before completion is claimed.
+
+Small changes skip the ceremony. New screens, redesigns, and "make this modern" do not.
 
 ---
 
-## File Structure
+## Golden rule
 
-```
-ui-architect/
-├── SKILL.md      # Full skill instructions (read by Antigravity automatically)
-└── README.md     # This file — human-readable overview
-```
+> Build interfaces that look designed by a thoughtful product designer and implemented by a skilled frontend engineer — not generated from a template.
+
+Clarity over decoration. Originality over trend. Usability over effect. Product context over generic pattern.
