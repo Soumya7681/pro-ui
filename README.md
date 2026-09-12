@@ -35,67 +35,116 @@ Framework-agnostic by design — it inspects the project before recommending any
 ## Install
 
 ```bash
-git clone https://github.com/shree2698/pro-ui.git ui-architect
-cd ui-architect
-./install.sh /path/to/your/project            # Claude Code + Codex (default)
-./install.sh /path/to/your/project all        # every supported agent
-./install.sh /path/to/your/project antigravity cursor
-./install.sh . claude-global                  # Claude Code, every project on this machine
+npx uipro init --ai cursor
 ```
 
-The skill body is copied once to `.ui-architect/` in the target project. Every agent
-gets a small pointer file that tells it to read `.ui-architect/AGENTS.md` on UI work,
-so there is one copy of the content no matter how many agents are installed. Claude Code
-is the exception: it uses its own skills directory, where `SKILL.md` loads natively.
+That is the whole installation. No clone, no dependency, nothing to build.
 
-Pointer blocks are fenced with `<!-- ui-architect:begin -->` markers and written once.
-Re-running the installer refreshes the body without duplicating instructions.
+```bash
+npx uipro init --ai claude,codex     # several at once
+npx uipro init --ai all              # every supported agent
+npx uipro init --ai claude --global  # every project on this machine
+npx uipro init                       # detects what the project uses, or asks
+```
 
-| Agent | Installs to | Activation |
+Install it permanently if you set up projects often:
+
+```bash
+npm install -g uipro
+uipro init --ai antigravity
+```
+
+### Commands
+
+| Command | Does |
+|---|---|
+| `uipro init --ai <agents>` | Install the skill for one or more agents |
+| `uipro init` | Detect the agents the project already uses, or ask |
+| `uipro update` | Refresh an existing install to the current version |
+| `uipro doctor` | Show what is installed and where |
+| `uipro remove [--ai <agents>]` | Uninstall, cleaning pointer blocks out of instruction files |
+| `uipro list` | List supported agents |
+
+### Options
+
+| Flag | Does |
+|---|---|
+| `-a, --ai <list>` | Agents, comma separated, or `all` |
+| `-d, --dir <path>` | Target project, default the current directory |
+| `-g, --global` | Machine-wide, where the agent supports it |
+| `-n, --dry-run` | Print what would change, write nothing |
+| `-f, --force` | Overwrite existing rule files |
+| `-y, --yes` | No prompts |
+
+### Where it lands
+
+The skill body is copied once to `.ui-architect/`. Each agent gets a small pointer file
+telling it to read `.ui-architect/AGENTS.md` on UI work, so there is one copy of the content
+no matter how many agents you install. Claude Code is the exception: it uses its own skills
+directory, where `SKILL.md` loads natively.
+
+| `--ai` | Installs to | Activation |
 |---|---|---|
 | `claude` | `.claude/skills/ui-architect/` | Loads automatically on UI work; `/ui-architect` invokes it by name |
-| `claude-global` | `~/.claude/skills/ui-architect/` | Same, available in every project on the machine |
 | `codex` | `.ui-architect/` + pointer in `AGENTS.md` | Read at the start of UI tasks |
-| `antigravity` | `.ui-architect/` + pointer in `AGENTS.md` and `.agents/rules/ui-architect.md` | Workspace rule, applied on UI work |
+| `antigravity` | `.ui-architect/` + pointer in `AGENTS.md` + `.agents/rules/ui-architect.md` | Workspace rule, applied on UI work |
 | `cursor` | `.ui-architect/` + `.cursor/rules/ui-architect.mdc` | Rule attaches on UI work |
 | `windsurf` | `.ui-architect/` + `.windsurf/rules/ui-architect.md` | Rule attaches on UI work |
 | `gemini` | `.ui-architect/` + pointer in `GEMINI.md` | Read at the start of UI tasks |
 | `copilot` | `.ui-architect/` + pointer in `.github/copilot-instructions.md` | Read at the start of UI tasks |
 | `generic` | `.ui-architect/` only | Point your own agent at `.ui-architect/AGENTS.md` |
 
+Pointer blocks are fenced with `<!-- ui-architect:begin -->` markers and written once.
+Re-running is safe: `uipro update` refreshes the body and the pointer in place, and
+`uipro remove` takes the block back out without touching the rest of your instruction file.
+
+With `--global`, Claude Code installs to `~/.claude/skills/ui-architect/`, and Antigravity
+and Gemini CLI write their pointer to `~/.gemini/GEMINI.md`.
+
 ---
 
-### Claude Code
+### Agent notes
+
+**Claude Code** — `uipro init --ai claude`. Reads the frontmatter description and loads the
+skill by itself when a task touches UI. `/ui-architect` invokes it by name.
+
+**Codex** — `uipro init --ai codex`. Appends the pointer to the project's root `AGENTS.md`,
+creating it if absent.
+
+**Antigravity** — `uipro init --ai antigravity`. Writes both entry points Antigravity reads:
+the cross-tool `AGENTS.md` and a workspace rule at `.agents/rules/ui-architect.md`. Older
+builds read `.agent/rules/` instead; copy the same file there if yours does. Precedence runs
+`GEMINI.md`, then `AGENTS.md`, then `.agents/rules/`, so a global install with `--global`
+lands in `~/.gemini/GEMINI.md` and wins over the project file.
+
+**Cursor** — `uipro init --ai cursor`. Writes `.cursor/rules/ui-architect.mdc` with
+`alwaysApply: false` and a UI-scoped description, so the rule attaches when it is relevant
+instead of sitting in every context.
+
+**Windsurf** — `uipro init --ai windsurf`. Writes `.windsurf/rules/ui-architect.md`.
+
+**Gemini CLI** — `uipro init --ai gemini`, or add `--global` for `~/.gemini/GEMINI.md`.
+
+**GitHub Copilot** — `uipro init --ai copilot`. Appends to `.github/copilot-instructions.md`.
+
+**Anything else** — `uipro init --ai generic` copies the body and stops. Point your agent at
+`.ui-architect/AGENTS.md` however it takes standing instructions: an instructions file, a
+rules directory, a system prompt, or a memory entry. Any agent that reads a root `AGENTS.md`
+works with `--ai codex` as-is.
+
+### Without the CLI
+
+Clone the repository and copy the files by hand. For Claude Code:
 
 ```bash
-./install.sh /path/to/your/project claude     # this project only
-./install.sh . claude-global                  # every project on this machine
-```
-
-Lands in `.claude/skills/ui-architect/` (or `~/.claude/skills/ui-architect/`) with `SKILL.md`,
-`references/`, and `templates/`. Claude Code reads the frontmatter description and loads the
-skill on its own when a task touches UI. Invoke it explicitly with `/ui-architect`.
-
-Manual equivalent:
-
-```bash
+git clone https://github.com/shree2698/pro-ui.git
 mkdir -p .claude/skills/ui-architect
-cp SKILL.md .claude/skills/ui-architect/
-cp -r references templates .claude/skills/ui-architect/
+cp pro-ui/SKILL.md .claude/skills/ui-architect/
+cp -r pro-ui/references pro-ui/templates .claude/skills/ui-architect/
 ```
 
-### Codex
-
-```bash
-./install.sh /path/to/your/project codex
-```
-
-Copies the body to `.ui-architect/` and appends a pointer block to the project's root
-`AGENTS.md`, creating it if absent. Codex reads `AGENTS.md` at the start of a session, sees
-the pointer, and loads `.ui-architect/AGENTS.md` when the work is UI work.
-
-Manual equivalent: copy `AGENTS.md`, `references/`, and `templates/` into `.ui-architect/`,
-then add to your root `AGENTS.md`:
+For any other agent, copy `AGENTS.md`, `references/`, and `templates/` into `.ui-architect/`
+and add this to whatever instruction file your agent reads:
 
 ```markdown
 ## UI / UX work
@@ -103,76 +152,6 @@ then add to your root `AGENTS.md`:
 Before any task that touches UI, UX, layout, visual design, styling, components,
 responsive behavior, or a redesign, read `.ui-architect/AGENTS.md` and follow it.
 ```
-
-### Antigravity
-
-```bash
-./install.sh /path/to/your/project antigravity
-```
-
-Writes both entry points Antigravity reads: a pointer in the root `AGENTS.md`, which is the
-cross-tool foundation, and a workspace rule at `.agents/rules/ui-architect.md`. Older
-Antigravity builds read `.agent/rules/` instead; copy the same file there if yours does.
-
-For a machine-wide install, add the pointer block to `~/.gemini/GEMINI.md`. Note the
-precedence: `GEMINI.md` overrides `AGENTS.md`, and `.agents/rules/` files apply last.
-
-### Cursor
-
-```bash
-./install.sh /path/to/your/project cursor
-```
-
-Writes `.cursor/rules/ui-architect.mdc` with `alwaysApply: false` and a description scoped to
-UI work, so the rule attaches when the task is relevant instead of sitting in every context.
-
-### Windsurf
-
-```bash
-./install.sh /path/to/your/project windsurf
-```
-
-Writes `.windsurf/rules/ui-architect.md`.
-
-### Gemini CLI
-
-```bash
-./install.sh /path/to/your/project gemini
-```
-
-Appends the pointer to the project's `GEMINI.md`. For every project on the machine, add the
-same block to `~/.gemini/GEMINI.md`.
-
-### GitHub Copilot
-
-```bash
-./install.sh /path/to/your/project copilot
-```
-
-Appends the pointer to `.github/copilot-instructions.md`.
-
-### Any other agent
-
-```bash
-./install.sh /path/to/your/project generic
-```
-
-Copies `AGENTS.md`, `references/`, and `templates/` to `.ui-architect/` and stops. Point your
-agent at `.ui-architect/AGENTS.md` however it takes standing instructions: an instructions
-file, a rules directory, a system prompt, or a memory entry. Any agent that reads `AGENTS.md`
-at the repository root works with the `codex` target as-is.
-
-That is the whole integration. There is no runtime, no dependency, and nothing to build.
-
-### Uninstall
-
-```bash
-rm -rf .ui-architect .claude/skills/ui-architect .cursor/rules/ui-architect.mdc \
-       .windsurf/rules/ui-architect.md .agents/rules/ui-architect.md
-```
-
-Then delete the block between the `<!-- ui-architect:begin -->` and `<!-- ui-architect:end -->`
-markers from any instruction file it was appended to.
 
 ---
 
@@ -183,7 +162,7 @@ SKILL.md        entry point for Claude Code (frontmatter + core rules)
 AGENTS.md       entry point for every other agent (same core, no frontmatter)
 references/     loaded on demand, only when the task calls for it
 templates/      fill-in artifacts the agent produces
-install.sh      per-agent installer
+bin/uipro.js    the CLI, zero dependencies, Node 18+
 ```
 
 Both entry points are short on purpose. The depth sits in `references/`, read only when relevant, so a small styling fix does not drag a design-system essay into context.
