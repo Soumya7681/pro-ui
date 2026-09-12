@@ -1,8 +1,8 @@
-# UI Architect
+# soureeui
 
 > A portable UI/UX design skill for AI coding agents — Claude Code, Codex, Antigravity, Cursor, Windsurf, Gemini CLI, Copilot, and anything else that reads project instructions.
 
-**Repository:** https://github.com/shree2698/pro-ui
+**Repository:** https://github.com/shree2698/soureeui
 
 Coding agents left alone produce a recognizable interface: purple gradient hero, giant centered heading, three identical feature cards, glass everywhere, everything rounded, lorem-adjacent copy. Competent, symmetrical, and indistinguishable from ten thousand other products.
 
