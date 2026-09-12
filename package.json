@@ -1,0 +1,47 @@
+{
+  "name": "uipro",
+  "version": "1.0.0",
+  "description": "Install the UI Architect design skill into Claude Code, Codex, Antigravity, Cursor, Windsurf, Gemini CLI, or Copilot, so the agent designs before it codes instead of producing generic AI-looking UI.",
+  "bin": {
+    "uipro": "bin/uipro.js"
+  },
+  "files": [
+    "bin",
+    "references",
+    "templates",
+    "AGENTS.md",
+    "SKILL.md",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "ui",
+    "ux",
+    "design",
+    "design-system",
+    "ai",
+    "agent",
+    "skill",
+    "claude-code",
+    "codex",
+    "antigravity",
+    "cursor",
+    "windsurf",
+    "copilot",
+    "agents-md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shree2698/pro-ui.git"
+  },
+  "homepage": "https://github.com/shree2698/pro-ui#readme",
+  "bugs": {
+    "url": "https://github.com/shree2698/pro-ui/issues"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "node bin/uipro.js --help > /dev/null && node bin/uipro.js list > /dev/null && echo ok"
+  }
+}
