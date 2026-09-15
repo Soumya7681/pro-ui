@@ -21,18 +21,24 @@ responsive behavior, or a redesign, read \`${bodyPath}\` and follow it. It defin
 the design process, the anti-generic-UI rules, and the reference files to load on demand.
 ${MARK_END}`
 
-const CURSOR_RULE = `---
+const CURSOR_RULE = (bodyPath) => `---
 description: UI/UX design process for any interface, layout, styling, component, or redesign work
 globs:
 alwaysApply: false
 ---
 
-Read \`${BODY_DIR}/AGENTS.md\` and follow it for any task touching UI, UX, layout,
+Read \`${bodyPath}\` and follow it for any task touching UI, UX, layout,
 visual design, styling, components, responsive behavior, or a redesign. It defines
 the design process, the anti-generic-UI rules, and reference files to load on demand.
 `
 
 // agent registry -------------------------------------------------------------
+
+// where the skill body lives, and how rule files should refer to it
+const bodyDir = (ctx) => path.join(ctx.global ? os.homedir() : ctx.dir, BODY_DIR)
+const bodyRef = (ctx) => (ctx.global
+  ? path.join(os.homedir(), BODY_DIR, 'AGENTS.md').replace(os.homedir(), '~')
+  : `${BODY_DIR}/AGENTS.md`)
 
 const claudeSkillDir = (ctx) => ctx.global
   ? path.join(os.homedir(), '.claude', 'skills', 'soureeui')
@@ -55,7 +61,7 @@ const AGENTS = {
       ctx.body()
       ctx.pointer(path.join(ctx.dir, 'AGENTS.md'))
     },
-    paths: (ctx) => [path.join(ctx.dir, BODY_DIR), path.join(ctx.dir, 'AGENTS.md')],
+    paths: (ctx) => [bodyDir(ctx), path.join(ctx.dir, 'AGENTS.md')],
   },
   antigravity: {
     label: 'Antigravity',
@@ -66,10 +72,10 @@ const AGENTS = {
         ? path.join(os.homedir(), '.gemini', 'GEMINI.md')
         : path.join(ctx.dir, 'AGENTS.md'))
       ctx.write(path.join(ctx.dir, '.agents', 'rules', 'soureeui.md'),
-        POINTER(`${BODY_DIR}/AGENTS.md`) + '\n')
+        POINTER(bodyRef(ctx)) + '\n')
     },
     paths: (ctx) => [
-      path.join(ctx.dir, BODY_DIR),
+      bodyDir(ctx),
       path.join(ctx.dir, '.agents', 'rules', 'soureeui.md'),
       path.join(ctx.dir, 'AGENTS.md'),
     ],
@@ -79,9 +85,9 @@ const AGENTS = {
     detect: ['.cursor'],
     install: (ctx) => {
       ctx.body()
-      ctx.write(path.join(ctx.dir, '.cursor', 'rules', 'soureeui.mdc'), CURSOR_RULE)
+      ctx.write(path.join(ctx.dir, '.cursor', 'rules', 'soureeui.mdc'), CURSOR_RULE(bodyRef(ctx)))
     },
-    paths: (ctx) => [path.join(ctx.dir, BODY_DIR), path.join(ctx.dir, '.cursor', 'rules', 'soureeui.mdc')],
+    paths: (ctx) => [bodyDir(ctx), path.join(ctx.dir, '.cursor', 'rules', 'soureeui.mdc')],
   },
   windsurf: {
     label: 'Windsurf',
@@ -89,9 +95,9 @@ const AGENTS = {
     install: (ctx) => {
       ctx.body()
       ctx.write(path.join(ctx.dir, '.windsurf', 'rules', 'soureeui.md'),
-        POINTER(`${BODY_DIR}/AGENTS.md`) + '\n')
+        POINTER(bodyRef(ctx)) + '\n')
     },
-    paths: (ctx) => [path.join(ctx.dir, BODY_DIR), path.join(ctx.dir, '.windsurf', 'rules', 'soureeui.md')],
+    paths: (ctx) => [bodyDir(ctx), path.join(ctx.dir, '.windsurf', 'rules', 'soureeui.md')],
   },
   gemini: {
     label: 'Gemini CLI',
@@ -102,7 +108,7 @@ const AGENTS = {
         ? path.join(os.homedir(), '.gemini', 'GEMINI.md')
         : path.join(ctx.dir, 'GEMINI.md'))
     },
-    paths: (ctx) => [path.join(ctx.dir, BODY_DIR), path.join(ctx.dir, 'GEMINI.md')],
+    paths: (ctx) => [bodyDir(ctx), path.join(ctx.dir, 'GEMINI.md')],
   },
   copilot: {
     label: 'GitHub Copilot',
@@ -111,16 +117,16 @@ const AGENTS = {
       ctx.body()
       ctx.pointer(path.join(ctx.dir, '.github', 'copilot-instructions.md'))
     },
-    paths: (ctx) => [path.join(ctx.dir, BODY_DIR), path.join(ctx.dir, '.github', 'copilot-instructions.md')],
+    paths: (ctx) => [bodyDir(ctx), path.join(ctx.dir, '.github', 'copilot-instructions.md')],
   },
   generic: {
     label: 'Any other agent',
     detect: [],
     install: (ctx) => {
       ctx.body()
-      ctx.note(`point your agent at ${BODY_DIR}/AGENTS.md`)
+      ctx.note(`point your agent at ${bodyRef(ctx)}`)
     },
-    paths: (ctx) => [path.join(ctx.dir, BODY_DIR)],
+    paths: (ctx) => [bodyDir(ctx)],
   },
 }
 
@@ -194,7 +200,7 @@ function makeCtx (opts, actions) {
     write: (file, content) => actions.push({ kind: 'write', file, content }),
     pointer: (file) => actions.push({ kind: 'pointer', file }),
     copyBody: (dest, o = {}) => actions.push({ kind: 'body', dest, skill: !!o.skill }),
-    body: () => ctx.copyBody(path.join(opts.dir, BODY_DIR)),
+    body: () => ctx.copyBody(bodyDir(ctx)),
   }
   return ctx
 }
@@ -241,10 +247,7 @@ function applyActions (actions, opts, ctx) {
     }
 
     if (a.kind === 'pointer') {
-      const bodyPath = opts.global
-        ? path.join(os.homedir(), BODY_DIR, 'AGENTS.md').replace(os.homedir(), '~')
-        : `${BODY_DIR}/AGENTS.md`
-      const block = POINTER(bodyPath)
+      const block = POINTER(bodyRef(ctx))
       const exists = fs.existsSync(a.file)
       const current = exists ? fs.readFileSync(a.file, 'utf8') : ''
 
